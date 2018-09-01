@@ -1,0 +1,122 @@
+div {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #99ff99;
+}
+
+h1 {
+  font-family: monospace;
+}
+
+#ui {
+  font-family: monospace;
+}
+
+#board {
+  position: relative;
+  border: 3px solid black;
+  box-shadow: 5px 5px 5px #333;
+  width: 1206px;
+  height: 500px;
+  background-image: url('arizonaBG.png');
+  background-size: cover;
+}
+
+.cup {
+  color: white;
+  text-shadow: 1px 1px 2px black;
+  font-size: 18pt;
+  position: absolute;
+  width: 150px;
+  height: 230px;
+  border: 1px solid green;
+  text-align: center;
+  cursor: pointer;
+}
+
+#cup-0 {
+  left: 150px;
+  bottom: 0px;
+}
+
+#cup-1 {
+  left: 300px;
+  bottom: 0px;
+}
+
+#cup-2 {
+  left: 450px;
+  bottom: 0px;
+}
+
+#cup-3 {
+  left: 600px;
+  bottom: 0px;
+}
+
+#cup-4 {
+  left: 750px;
+  bottom: 0px;
+}
+
+#cup-5 {
+  left: 900px;
+  bottom: 0px;
+}
+
+#cup-6 {
+  /*player 1's Mancala*/
+  left: 1050px;
+  bottom: 0px;
+  height: 350px;
+  cursor: not-allowed;
+}
+
+#cup-7 {
+  left: 900px;
+  top: 0px;
+}
+
+#cup-8 {
+  left: 750px;
+  top: 0px;
+}
+
+#cup-9 {
+  left: 600px;
+  top: 0px;
+}
+
+#cup-10 {
+  left: 450px;
+  top: 0px;
+}
+
+#cup-11 {
+  left: 300px;
+  top: 0px;
+}
+
+#cup-12 {
+  left: 150px;
+  top: 0px;
+}
+
+#cup-13 {
+  /*player 2's Mancala*/
+  left: 0px;
+  top: 0px;
+  height: 350px;
+  cursor: not-allowed;
+}
+
+
+
+.token {
+  width: 50px;
+  height: 50px;
+  background-image: url('tabToken.png');
+  background-size: cover;
+}
