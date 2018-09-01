@@ -235,7 +235,7 @@ function checkForWin() {
 
   description.textContent
   turn = p0V > p1V;
-  if(p0V == p1V){
+  if (p0V == p1V) {
     turn = 2;
   }
   if (window.confirm(winMsg[turn])) {
