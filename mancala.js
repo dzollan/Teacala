@@ -25,6 +25,8 @@ function setupGame() {
   turn = 0;
   additional = false;
   board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; //Initial piles
+  //board = [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0]; //Test Piles
+
 
 
   drawBoard();
@@ -230,20 +232,25 @@ function checkForWin() {
   }
   var cups = Array.from(document.getElementsByClassName('cup'));
   cups.forEach(setCount);
-  var p0V = getElementById("cup-6").firstChild.textContent;
-  var p1V = getElementById("cup-13").firstChild.textContent;
+  var p0V = board[6];
+  var p1V = board[13];
 
-  description.textContent
   turn = p0V > p1V;
+  turn++;
+  turn--;
   if (p0V == p1V) {
     turn = 2;
   }
+  console.log(p0V + " & " + p1V + ' turn=' + turn);
+  setTimeout(function(){playAgain();}, 750);
+
+}
+function playAgain(){
   if (window.confirm(winMsg[turn])) {
     setupGame();
   } else {
     window.location.href = "https://github.com/dzollan/Teacala";
   }
-
 }
 // Attach click listeners to all 12 pouches
 for (var p = 0; p < 14; p++) {
