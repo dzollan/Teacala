@@ -1,10 +1,9 @@
 /*constants*/
 const turnMsg = ["It is player zero's turn.", "It is player one's turn."];
-const winMsg = ["Player zero wins!", "Player one wins!"];
+const winMsg = ["Player zero wins!\nPlay again?", "Player one wins!\nPlay again?", "tie? \nPlay again?"];
 
 /*globals*/
-var turn;
-var board;
+var turn, additional, board;
 
 /*generic random function*/
 function getRndInteger(min, max) {
@@ -24,7 +23,9 @@ function setupGame() {
   }
 
   turn = 0;
+  additional = false;
   board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; //Initial piles
+
 
   drawBoard();
   document.getElementById("ui").innerText = turnMsg[0];
@@ -68,10 +69,7 @@ function drawBoard() {
 }
 
 
-function bye(bParent, bChild) {
 
-  bParent.removeChild(bChild);
-}
 
 function removeToken(pouch) {
   thisCup = document.getElementById('cup-' + pouch);
@@ -91,7 +89,7 @@ function placeToken(toPouch, finalToken) {
   if (toPouch == 6 || toPouch == 13) {
     randomY *= 1.5;
   }
- board[toPouch]++;
+  board[toPouch]++;
   thisToken.classList.add("token");
   thisCup.appendChild(thisToken);
   thisToken.style.webkitTransform = 'rotate(' + randomR + 'deg)';
@@ -103,27 +101,28 @@ function placeToken(toPouch, finalToken) {
   thisToken.style.left = randomX + 'px';
   thisToken.style.top = randomY + 'px';
   if (finalToken) {
+    console.log("final token: " + toPouch);
     if (board[toPouch] == 1) {
-      if ((!turn && toPouch < 6) || (turn && toPouch > 6)) {
+      console.log('turn: ' + turn);
+      if ((!turn && toPouch < 6 && toPouch > 0) || (turn && toPouch > 6 && toPouch < 13)) {
         var opp = 12 - toPouch;
         var pp;
         for (pp = 0; pp < board[opp]; pp++) {
           removeToken(opp);
-          if(opp>6){
-            placeToken(6,0);
-          }
-          else{
-            placeToken(13,0);
+          if (opp > 6) {
+            placeToken(6, 0);
+          } else {
+            placeToken(13, 0);
           }
         }
-        board[opp]=0;
-      }
-      else if((!turn && toPouch == 6) || (turn && toPouch == 13)) {
-        turn ^= true;
+        board[opp] = 0;
       }
     }
-  checkForWin();
+    if ((!turn && toPouch == 6) || (turn && toPouch == 13)) {
+      additional = true;
+    }
   }
+
 
 
 
@@ -154,7 +153,14 @@ function makeMove(pouchNum) {
       board[pouchNum] = 0;
       var cups = Array.from(document.getElementsByClassName('cup'));
       cups.forEach(setCount);
-      turn ^= true;
+      checkForWin();
+      if (additional) {
+        additional = checkForEmpty();
+      }
+      if (!additional) {
+        turn ^= true;
+      }
+      additional = false;
       document.getElementById("ui").innerText = turnMsg[turn];
 
     } else {
@@ -165,40 +171,80 @@ function makeMove(pouchNum) {
   }
 }
 
-function checkForWin(){
+function checkForEmpty() {
   var itr, ibb;
-  if(!turn){
-    for(itr = 0; itr <6; itr++){
-      if(board[itr]){
-        return;
+  if (!turn) {
+    console.log("bong");
+    for (itr = 0; itr < 6; itr++) {
+      if (board[itr]) {
+        console.log('itr =' + itr + ', board = ' + board[itr]);
+        return true;
+      }
+    }
+  } else {
+    console.log("bing 2");
+    for (itr = 7; itr < 13; itr++) {
+      if (board[itr]) {
+        console.log('itr =' + itr + ', board = ' + board[itr]);
+        return true;
       }
     }
   }
-  else{
-    for(itr = 7; itr <13; itr++){
-      if(board[itr]){
-        return;
-      }
-    }
-  }
+  return false;
+}
 
-  if(!turn){
-    for(itr = 0; itr <6; itr++){
-      for(ibb = 0)(board[itr]){
+
+function checkForWin() {
+  var itr, ibb;
+  if (turn) {
+    console.log("bong");
+    for (itr = 0; itr < 6; itr++) {
+      if (board[itr]) {
+        return;
+      }
+    }
+  } else {
+    console.log("bing 2");
+    for (itr = 7; itr < 13; itr++) {
+      if (board[itr]) {
         return;
       }
     }
   }
-  else{
-    for(itr = 7; itr <13; itr++){
-      if(board[itr]){
-        return;
+  if (!turn) {
+    for (itr = 0; itr < 6; itr++) {
+      for (ibb = 0; ibb < board[itr]; ibb++) {
+        removeToken(itr);
+        placeToken(6, 0);
       }
+      board[itr] = 0;
     }
+  } else {
+    for (itr = 7; itr < 13; itr++) {
+      for (ibb = 0; ibb < board[itr]; ibb++) {
+        removeToken(itr);
+        placeToken(6, 0);
+      }
+      board[itr] = 0;
+    }
+  }
+  var cups = Array.from(document.getElementsByClassName('cup'));
+  cups.forEach(setCount);
+  var p0V = getElementById("cup-6").firstChild.textContent;
+  var p1V = getElementById("cup-13").firstChild.textContent;
+
+  description.textContent
+  turn = p0V > p1V;
+  if(p0V == p1V){
+    turn = 2;
+  }
+  if (window.confirm(winMsg[turn])) {
+    setupGame();
+  } else {
+    window.location.href = "https://github.com/dzollan/Teacala";
   }
 
 }
-
 // Attach click listeners to all 12 pouches
 for (var p = 0; p < 14; p++) {
   if (p != 6 && p != 13) {
